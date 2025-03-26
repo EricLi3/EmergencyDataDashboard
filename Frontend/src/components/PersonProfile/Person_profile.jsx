@@ -17,11 +17,13 @@ const PersonProfile = ({ residents }) => {
     <div className="profile-container">
       <h1>Resident Profile</h1>
       <div className="profile-card">
-        <p><strong>Name:</strong> {resident["Name of main point of contact (First, Last)"]}</p>
+        <p><strong>Name:</strong> {resident["Name of main point of contact (ex. John Smith)"]}</p>
         <p><strong>Phone:</strong> {resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}</p>
         <p><strong>Email:</strong> {resident["Email Address"]}</p>
-        <p><strong>Address:</strong> {resident["Location (Address/Coordinates) of Home"]}</p>
-        <p><strong>Number of Residents:</strong> {resident["Number of Residents"]}</p>
+        <p><strong>Address:</strong> {resident["Location (Address) of Home"]}</p>
+        <p><strong>Number of Residents:</strong> {resident["Number of Residents in Household"]}</p>
+        <p><strong>Children (Under 16):</strong> {resident["How many said residents are children (Under 16 years of age)"]}</p>
+        <p><strong>Elderly (60+):</strong> {resident["How many said residents are elderly (60 years +)?"]}</p>
         <p><strong>Newsletter Subscription:</strong> {resident["Want to be added to the Monthly Newsletter email chain?"]}</p>
         <p><strong>WhatsApp Alerts:</strong> {resident["Would you like to receive important WhatsApp alerts?"]}</p>
         <p><strong>Volunteer Interest:</strong> {resident["Would you like to volunteer?"]}</p>

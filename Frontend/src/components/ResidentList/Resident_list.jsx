@@ -42,6 +42,8 @@ const ResidentList = ({ residents }) => {
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Address</StyledTableCell>
               <StyledTableCell>Number of Residents</StyledTableCell>
+              <StyledTableCell>Children (Under 16)</StyledTableCell>
+              <StyledTableCell>Elderly (60+)</StyledTableCell>
               <StyledTableCell>Phone Number</StyledTableCell>
               <StyledTableCell>Skills</StyledTableCell>
               <StyledTableCell>Newsletter</StyledTableCell>
@@ -55,11 +57,13 @@ const ResidentList = ({ residents }) => {
             {residents.map((resident, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
-                  {resident["Name of main point of contact (First, Last)"]}
+                  {resident["Name of main point of contact (ex. John Smith)"]}
                 </StyledTableCell>
                 <StyledTableCell>{resident["Email Address"]}</StyledTableCell>
-                <StyledTableCell>{resident["Location (Address/Coordinates) of Home"]}</StyledTableCell>
-                <StyledTableCell>{resident["Number of Residents"]}</StyledTableCell>
+                <StyledTableCell>{resident["Location (Address) of Home"]}</StyledTableCell>
+                <StyledTableCell>{resident["Number of Residents in Household"]}</StyledTableCell>
+                <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"]}</StyledTableCell>
+                <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"]}</StyledTableCell>
                 <StyledTableCell>{resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}</StyledTableCell>
                 <StyledTableCell>{resident["Skills"]}</StyledTableCell>
                 <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"]}</StyledTableCell>
