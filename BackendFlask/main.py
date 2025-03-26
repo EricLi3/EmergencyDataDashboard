@@ -21,18 +21,12 @@ def fetch_data():
     data = sheet.get_all_records()
     return pd.DataFrame(data)
 
-# Route: Fetch all residents with optional filtering
+# Route: Fetch all residents
 @app.route("/get_residents", methods=["GET"])
 def get_residents():
-    """Returns all residents' data directly from Google Sheets with optional filtering"""
+    """Returns all residents' data directly from Google Sheets"""
     try:
         df = fetch_data()
-        
-        # Apply filters based on query parameters
-        for key, value in request.args.items():
-            if key in df.columns:
-                df = df[df[key] == value]
-        
         return jsonify(df.to_dict(orient='records'))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -58,5 +52,27 @@ def get_whatsapp_numbers():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/update_resident/<int:row_id>", methods=["PUT"])
+def update_resident(row_id):
+    """Updates a resident's data in Google Sheets"""
+    try:
+        data = request.json
+        sheet = client.open_by_key(SHEET_ID).sheet1
+        sheet.update(f'A{row_id}:Z{row_id}', [list(data.values())])
+        return jsonify({"message": "Resident updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/delete_resident/<int:row_id>", methods=["DELETE"])
+def delete_resident(row_id):
+    """Deletes a resident's data from Google Sheets"""
+    try:
+        sheet = client.open_by_key(SHEET_ID).sheet1
+        sheet.delete_rows(row_id)
+        return jsonify({"message": "Resident deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True)
+    

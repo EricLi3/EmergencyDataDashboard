@@ -8,6 +8,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { red } from '@mui/material/colors';
+import axios from '../../axios/axiosConfig'; // Import the axios instance
 import "./ResidentList.css"; // Add some styling
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -30,7 +34,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const ResidentList = ({ residents }) => {
+const ResidentList = ({ residents, fetchResidents }) => {
+
+  const handleDelete = async (rowId) => {
+    console.log(`Attempting to delete resident with row ID: ${rowId}`);
+    try {
+      const response = await axios.delete(`/delete_resident/${rowId}`);
+      console.log('Delete response:', response);
+      fetchResidents(); // Refresh the resident list after deletion
+    } catch (error) {
+      console.error('Error deleting resident:', error);
+    }
+  };
+
   return (
     <div className="resident-list">
       <h1>Enrolled Residents</h1>
@@ -73,6 +89,11 @@ const ResidentList = ({ residents }) => {
                   <Link to={`/profile/${index}`}>
                     View Profile
                   </Link>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <IconButton onClick={() => handleDelete(index + 2)} aria-label="delete" style={{ color: red[500] }}>
+                    <DeleteIcon />
+                  </IconButton>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

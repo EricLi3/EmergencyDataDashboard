@@ -11,41 +11,49 @@ import "./App.css";
 function App() {
   const [residents, setResidents] = useState([]);
   const [whatsappNumbers, setWhatsappNumbers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  // Function to fetch residents
+  const fetchResidents = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://127.0.0.1:5000/get_residents");
+      setResidents(response.data);
+    } catch (error) {
+      console.error("Error fetching residents!", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch WhatsApp numbers
+  const fetchWhatsAppNumbers = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/get_whatsapp_numbers");
+      setWhatsappNumbers(response.data.whatsapp_numbers);
+    } catch (error) {
+      console.error("Error fetching WhatsApp numbers!", error);
+    }
+  };
 
   useEffect(() => {
-    // Fetch residents data 
-    axios
-      .get("http://127.0.0.1:5000/get_residents")
-      .then((response) => {
-        setResidents(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the residents!", error);
-      });
-
-    // Fetch WhatsApp numbers
-    axios
-      .get("http://127.0.0.1:5000/get_whatsapp_numbers")
-      .then((response) => {
-        setWhatsappNumbers(response.data.whatsapp_numbers);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the WhatsApp numbers!", error);
-      });
+    fetchResidents();
+    fetchWhatsAppNumbers();
   }, []);
 
   return (
-    <div className="App">    
-    <Router>
-      <Navbar />
+    <div className="App">
+      <Router>
+        <Navbar />
         <Routes>
-          <Route path="/" element={<ResidentList residents={residents} />} />
+          <Route path="/" element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />} />
           <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
-          <Route path = "/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
-          <Route path = "/map" element={<Map></Map>} />
+          <Route path="/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
+          <Route path="/map" element={<Map />} />
         </Routes>
-    </Router>
-  </div>
+      </Router>
+    </div>
   );
 }
 
