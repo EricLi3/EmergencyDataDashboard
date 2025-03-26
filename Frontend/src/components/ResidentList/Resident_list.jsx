@@ -52,7 +52,7 @@ const ResidentList = ({ residents, fetchResidents }) => {
       <h1>Enrolled Residents</h1>
       <TableContainer component={Paper}>
         <Table>
-        <TableHead>
+          <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
@@ -66,37 +66,41 @@ const ResidentList = ({ residents, fetchResidents }) => {
               <StyledTableCell>WhatsApp Alerts</StyledTableCell>
               <StyledTableCell>Volunteer</StyledTableCell>
               <StyledTableCell align="right">Profile Link</StyledTableCell>
+              <StyledTableCell align="right">Delete Resident</StyledTableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {residents.map((resident, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row">
-                  {resident["Name of main point of contact (ex. John Smith)"]}
-                </StyledTableCell>
-                <StyledTableCell>{resident["Email Address"]}</StyledTableCell>
-                <StyledTableCell>{resident["Location (Address) of Home"]}</StyledTableCell>
-                <StyledTableCell>{resident["Number of Residents in Household"]}</StyledTableCell>
-                <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"]}</StyledTableCell>
-                <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"]}</StyledTableCell>
-                <StyledTableCell>{resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}</StyledTableCell>
-                <StyledTableCell>{resident["Skills"]}</StyledTableCell>
-                <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"]}</StyledTableCell>
-                <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"]}</StyledTableCell>
-                <StyledTableCell>{resident["Would you like to volunteer?"]}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Link to={`/profile/${index}`}>
-                    View Profile
-                  </Link>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <IconButton onClick={() => handleDelete(index + 2)} aria-label="delete" style={{ color: red[500] }}>
-                    <DeleteIcon />
-                  </IconButton>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {residents.map((resident, index) => {
+              const email = resident["Preferred Email address if not Google"] || resident["Email Address"];
+              return (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                    {resident["Name of main point of contact (ex. John Smith)"]}
+                  </StyledTableCell>
+                  <StyledTableCell>{email}</StyledTableCell>
+                  <StyledTableCell>{resident["Location (Address) of Home"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Number of Residents in Household"]}</StyledTableCell>
+                  <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"]}</StyledTableCell>
+                  <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Skills"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Would you like to volunteer?"]}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Link to={`/profile/${index}`}>
+                      View Profile
+                    </Link>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <IconButton onClick={() => handleDelete(index + 2)} aria-label="delete" style={{ color: red[500] }}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </StyledTableCell>
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
