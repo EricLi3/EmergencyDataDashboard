@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import ResidentList from "./components/ResidentList/Resident_list";
+import PersonProfile from "./components/PersonProfile/Person_profile";
+import WhatsAppNumbers from "./components/WhatsAppNumbers/WhatsAppNumbers";
+import Navbar from "./components/Navbar/Navbar";
+import "./App.css";
 
 function App() {
   const [residents, setResidents] = useState([]);
   const [whatsappNumbers, setWhatsappNumbers] = useState([]);
 
   useEffect(() => {
-    // Fetch residents data
+    // Fetch residents data 
     axios
       .get("http://127.0.0.1:5000/get_residents")
       .then((response) => {
@@ -28,23 +34,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>Residents List</h1>
-      <ul>
-        {residents.map((resident, index) => (
-          <li key={index}>
-            {resident["Name of main point of contact (First, Last)"]} -{" "}
-            {resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}
-          </li>
-        ))}
-      </ul>
-      <h2>WhatsApp Numbers</h2>
-      <ul>
-        {whatsappNumbers.map((number, index) => (
-          <li key={index}>{number}</li>
-        ))}
-      </ul>
-    </div>
+    <div className="App">    
+    <Router>
+      <Navbar />
+        <Routes>
+          <Route path="/" element={<ResidentList residents={residents} />} />
+          <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
+          <Route path = "/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
+        </Routes>
+    </Router>
+  </div>
   );
 }
 
