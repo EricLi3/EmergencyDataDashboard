@@ -1,0 +1,8 @@
+.resident-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 20px;
+  list-style: none;
+}

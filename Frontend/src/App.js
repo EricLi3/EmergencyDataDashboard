@@ -5,6 +5,7 @@ import ResidentList from "./components/ResidentList/Resident_list";
 import PersonProfile from "./components/PersonProfile/Person_profile";
 import WhatsAppNumbers from "./components/WhatsAppNumbers/WhatsAppNumbers";
 import Navbar from "./components/Navbar/Navbar";
+import Map from "./components/Maps/Map";
 import "./App.css";
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<ResidentList residents={residents} />} />
           <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
           <Route path = "/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
+          <Route path = "/map" element={<Map></Map>} />
         </Routes>
     </Router>
   </div>
