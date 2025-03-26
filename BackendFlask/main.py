@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
@@ -21,12 +21,18 @@ def fetch_data():
     data = sheet.get_all_records()
     return pd.DataFrame(data)
 
-# Route: Fetch all residents
+# Route: Fetch all residents with optional filtering
 @app.route("/get_residents", methods=["GET"])
 def get_residents():
-    """Returns all residents' data directly from Google Sheets"""
+    """Returns all residents' data directly from Google Sheets with optional filtering"""
     try:
         df = fetch_data()
+        
+        # Apply filters based on query parameters
+        for key, value in request.args.items():
+            if key in df.columns:
+                df = df[df[key] == value]
+        
         return jsonify(df.to_dict(orient='records'))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
