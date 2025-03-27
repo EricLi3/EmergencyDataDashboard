@@ -7,7 +7,7 @@ const Workflow = () => {
             image: "/images/Onboarding.png",
             title: "Enrollment Form",
             subtitle: null,
-            text: "This is the enrollment form for users.",
+            text: "This is the enrollment form for users to the Goyco Emergency Plan.",
             userLink: "https://forms.gle/VU8Kfc4ebhaBVkM88",
             editorLink: "https://docs.google.com/forms/d/1St-ysQXoN3uqIPpJBIMB_OEir59ghMUls2d52-kSaac/edit"
         },
@@ -18,8 +18,15 @@ const Workflow = () => {
             text: "This google sheets contains all the data collected from the forms",
             userLink: "",
             editorLink: "https://docs.google.com/spreadsheets/d/1dTDd8Xwg3wv7MRHG2WAX_vXZKlEFne_rDMeemcHSD3s/edit?gid=1949800455#gid=1949800455"
-        }
-
+        },
+        {
+            image: "/images/MasterMap2024.png",
+            title: "Master Map",
+            subtitle: null,
+            text: "This google myMaps contains useful demographic information on residents.",
+            userLink: "",
+            editorLink: "https://docs.google.com/spreadsheets/d/1dTDd8Xwg3wv7MRHG2WAX_vXZKlEFne_rDMeemcHSD3s/edit?gid=1949800455#gid=1949800455"
+        },
     ];
 
     return (

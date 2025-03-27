@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 
 const Deliverables = ({ image, title, subtitle, text, userLink, editorLink }) => {
     return (
-        <Card className="card-hover" style={{ width: '20rem', height: '25rem', margin: '5px', backgroundColor: 'white', border: '1px solid black' }}>
+        <Card className="card-hover" style={{ width: '20rem', height: '27rem', margin: '5px', backgroundColor: 'white', border: '1px solid black' }}>
             <Card.Img variant="top" src={image} style={{ height: '250px', objectFit: 'cover' }} />
             <br />
             <Card.Body>
