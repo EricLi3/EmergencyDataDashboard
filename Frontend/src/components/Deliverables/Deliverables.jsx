@@ -9,7 +9,7 @@ const Deliverables = ({ image, title, subtitle, text, userLink, editorLink }) =>
             <Card.Img variant="top" src={image} style={{ height: '250px', objectFit: 'cover' }} />
             <br />
             <Card.Body>
-                <Card.Title style={{ color: '#D1D5DB' }}>
+                <Card.Title style={{ color: 'black' }}>
                     <b>{title}</b>
                     {subtitle && <><br /><i>{subtitle}</i></>}
                 </Card.Title>
