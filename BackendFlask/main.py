@@ -47,7 +47,7 @@ def get_whatsapp_numbers():
         whatsapp_users = df[df["Would you like to receive important WhatsApp alerts?"] == "yes"]
         
         # Extract WhatsApp numbers
-        numbers = whatsapp_users["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"].tolist()
+        numbers = whatsapp_users["Phone Number"].tolist()
         
         return jsonify({"whatsapp_numbers": numbers})
 

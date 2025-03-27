@@ -79,11 +79,11 @@ const ResidentList = ({ residents, fetchResidents }) => {
                     {resident["Name of main point of contact (ex. John Smith)"]}
                   </StyledTableCell>
                   <StyledTableCell>{email}</StyledTableCell>
-                  <StyledTableCell>{resident["Location (Address) of Home"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Address"]}</StyledTableCell>
                   <StyledTableCell>{resident["Number of Residents in Household"]}</StyledTableCell>
                   <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"]}</StyledTableCell>
                   <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Phone Number for WhatsApp Communication (Include Area Code e.g \"1\" for U.S. Numbers)"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Phone Number"]}</StyledTableCell>
                   <StyledTableCell>{resident["Skills"]}</StyledTableCell>
                   <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"]}</StyledTableCell>
                   <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"]}</StyledTableCell>
