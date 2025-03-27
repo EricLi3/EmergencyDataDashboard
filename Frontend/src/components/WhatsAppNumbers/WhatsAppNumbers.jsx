@@ -1,6 +1,7 @@
 import React from "react";
 import "./WhatsAppNumbers.css";
 import Alert from '@mui/material/Alert';
+import Broacast from '../Broadcast/Broadcast';
 
 const WhatsAppNumbers = ({ numbers }) => {
 
@@ -28,7 +29,11 @@ const WhatsAppNumbers = ({ numbers }) => {
         ))}
       </ul>
       <button onClick={saveToFile}>Save to .txt</button>
+      
 
+      <h1>Launch Broadcast Application</h1>
+      <Broacast />
+      
     </div>
   );
 };
