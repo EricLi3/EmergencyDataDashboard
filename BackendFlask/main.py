@@ -4,6 +4,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 from flask_cors import CORS
 import subprocess  # To run the .exe file
+import time
 
 app = Flask(__name__)
 CORS(app)  # Allow all origins
@@ -79,6 +80,9 @@ def launch_exe():
     try:
         exe_path = "/Users/ericli/WPI\ Coding/IQP/DataDashboard/Frontend/src/gui"
         subprocess.Popen(exe_path, shell=True)
+        time.sleep(8)
+
+        # Respond after the delay
         return jsonify({"message": "Application launched successfully!"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
