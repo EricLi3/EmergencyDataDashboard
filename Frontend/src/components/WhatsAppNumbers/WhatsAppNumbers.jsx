@@ -17,7 +17,7 @@ const WhatsAppNumbers = ({ numbers }) => {
     URL.revokeObjectURL(link.href);
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
-  };
+  };  
 
   return (
     <div className="numbers-container">

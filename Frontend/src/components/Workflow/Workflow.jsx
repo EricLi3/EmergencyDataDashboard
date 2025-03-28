@@ -39,7 +39,7 @@ const Workflow = () => {
             subtitle: null,
             text: "This Google MyMaps contains useful demographic information on residents.",
             userLink: "",
-            editorLink: "https://docs.google.com/spreadsheets/d/1dTDd8Xwg3wv7MRHG2WAX_vXZKlEFne_rDMeemcHSD3s/edit?gid=1949800455#gid=1949800455"
+            editorLink: "https://www.google.com/maps/d/edit?mid=1kDED7vqz9AogrU1Gtooek6W2IZ8koY8&usp=sharing"
         }
     ];
 
