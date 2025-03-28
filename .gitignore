@@ -1,3 +1,4 @@
 .gitignore
 BackendFlask/credentials.json
 .DS_Store
+Frontend\node_modules
