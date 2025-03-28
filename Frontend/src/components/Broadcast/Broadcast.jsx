@@ -89,7 +89,11 @@ const Broadcast = () => {
         />
       </a>
 
-      <p><b>For mac users: </b>Go to the location this file was downloaded and open a terminal. Type <b>"chmod +x ./gui"</b> to make the file runnable. Press the enter key and then type <b>"./exe" </b>. From there, follow the instructions on the application. </p>
+      <p><b>For mac users: </b>Go to the location this file was downloaded and open a terminal. Type <b>"chmod +x ./gui"</b> to make the file runnable. Press the enter key and then type <b>"./gui" </b>. 
+      </p>
+
+      <p>
+      If the above doesn't work, please go into settings, Now, go to System Settings - Privacy & Security and click Open Anyway if the ./gui has appeared under Security. From there, enter "./gui" again and follow the instructions on the application. </p>
     </div>
   );
 };
