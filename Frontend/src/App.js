@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import axios from "axios";
 import ResidentList from "./components/ResidentList/Resident_list";
 import PersonProfile from "./components/PersonProfile/Person_profile";
 import WhatsAppNumbers from "./components/WhatsAppNumbers/WhatsAppNumbers";
 import Navbar from "./components/Navbar/Navbar";
 import Map from "./components/Maps/Map";
 import Workflow from "./components/Workflow/Workflow";
+import instance from "./axios/axiosConfig";
 import "./App.css";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
   const fetchResidents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://127.0.0.1:5000/get_residents");
+      const response = await instance.get("/get_residents");
       setResidents(response.data);
     } catch (error) {
       console.error("Error fetching residents!", error);
@@ -31,7 +31,7 @@ function App() {
   // Fetch WhatsApp numbers
   const fetchWhatsAppNumbers = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/get_whatsapp_numbers");
+      const response = await instance.get("/get_whatsapp_numbers");
       setWhatsappNumbers(response.data.whatsapp_numbers);
     } catch (error) {
       console.error("Error fetching WhatsApp numbers!", error);

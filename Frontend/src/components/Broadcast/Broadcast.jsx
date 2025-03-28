@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress"; // Import MUI spinner
+import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
+import instance from "../../axios/axiosConfig";
 
 const Broadcast = () => {
   const [message, setMessage] = useState("");
@@ -13,14 +14,9 @@ const Broadcast = () => {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/launch-exe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await instance.post("/launch-exe", {}); // Use axios instance
+      const data = response.data;
 
-      const data = await response.json();
       if (data.error) {
         setError(data.error);
       } else {
