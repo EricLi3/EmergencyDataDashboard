@@ -94,6 +94,8 @@ const Broadcast = () => {
 
       <p>
       If the above doesn't work, please go into settings, Now, go to System Settings - Privacy & Security and click Open Anyway if the ./gui has appeared under Security. From there, enter "./gui" again and follow the instructions on the application. </p>
+
+      <img src="/images/allowanways.png" alt="Allow Anyway" style={{ marginTop: "20px", marginBottom:"20px", maxWidth: "30%" }} />
     </div>
   );
 };
