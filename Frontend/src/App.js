@@ -6,6 +6,8 @@ import WhatsAppNumbers from "./components/WhatsAppNumbers/WhatsAppNumbers";
 import Navbar from "./components/Navbar/Navbar";
 import Map from "./components/Maps/Map";
 import Workflow from "./components/Workflow/Workflow";
+import Inventory from "./components/Inventory/Inventory";
+import Guides from "./components/Guides/Guides";
 import instance from "./axios/axiosConfig";
 import "./App.css";
 
@@ -50,6 +52,8 @@ function App() {
         <Routes>
           <Route path="/" element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />} />
           <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/guides" element={<Guides />} />
           <Route path="/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
           <Route path="/map" element={<Map />} />
           <Route path="/workflow" element={<Workflow />} />
