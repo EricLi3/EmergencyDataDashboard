@@ -1,79 +1,6 @@
 import React from "react";
 
 const Broadcast = () => {
-
-  // const handleFileUpload = async (file, type) => {
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-
-  //   try {
-  //     const response = await axios.post("/upload", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-  //     if (type === "numbers") setNumbersFile(response.data.file_path);
-
-  //     console.log(response.data.file_path);
-  //     console.log(response.data.message);
-  //     if (type === "image") setImageFile(response.data.file_path);
-  //     setStatus(response.data.message);
-  //   } catch (error) {
-  //     setStatus("Error uploading file");
-  //   }
-  // };
-
-  // const handleSendMessages = async () => {
-  //   console.log(numbersFile, message, imageFile);
-  //   if (!numbersFile || (!message && !imageFile)) {
-  //     setStatus("Please provide all required inputs");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("/send-messages", {
-  //       numbers_file: numbersFile,
-  //       message,
-  //       image_path: imageFile,
-  //     });
-  //     setStatus(response.data.message);
-  //   } catch (error) {
-  //     setStatus("Error sending messages");
-  //   }
-  // };
-  // const handleSendMessages = async () => {
-  //   console.log(numbersFile, message, imageFile);
-  //   if (!numbersFile || (!message && !imageFile)) {
-  //     setStatus("Please provide all required inputs");
-  //     return;
-  //   }
-
-  //   if (!numbersFile) {
-  //     setStatus("❌ Please upload a valid numbers file.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.get("/get_whatsapp_numbers");
-  //     const phoneNumbers = response.data.whatsapp_numbers;
-
-  //     if (phoneNumbers.length === 0) {
-  //       setStatus("❌ No valid WhatsApp numbers found.");
-  //       return;
-  //     }
-
-  //     setStatus("📩 Opening WhatsApp Web...");
-  //     phoneNumbers.forEach((number, index) => {
-  //       setTimeout(() => {
-  //         const encodedMessage = encodeURIComponent(message);
-  //         const url = `https://wa.me/${number}?text=${encodedMessage}`;
-  //         window.open(url, "_blank");
-  //       }, index * 3000); // Opens a new tab every 3 seconds
-  //     });
-
-  //     setStatus(`✅ Opened ${phoneNumbers.length} WhatsApp chats.`);
-  //   } catch (error) {
-  //     setStatus("❌ Error fetching WhatsApp numbers.");
-  //   }
-  // };
   
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
@@ -84,6 +11,14 @@ const Broadcast = () => {
       <a href="https://drive.google.com/file/d/1yi5rsBim-xESrA14xWdtVFo_dP4Jh9V-/view?usp=sharing" target="_blank" rel="noopener noreferrer">
         <img
           src="/images/downloadForMac.png"
+          alt="Download Executable"
+          style={{ cursor: "pointer", marginTop: "20px" }}
+        />
+      </a>
+
+      <a href="" target="_blank" rel="noopener noreferrer">
+        <img
+          src="/images/downloadForWindows.png"
           alt="Download Executable"
           style={{ cursor: "pointer", marginTop: "20px" }}
         />
