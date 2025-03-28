@@ -30,8 +30,6 @@ const WhatsAppNumbers = ({ numbers }) => {
       </ul>
       <button onClick={saveToFile}>Save to .txt</button>
       
-
-      <h1>Launch Broadcast Application</h1>
       <Broacast />
       
     </div>
