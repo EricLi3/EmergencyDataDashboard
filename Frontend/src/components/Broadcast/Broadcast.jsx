@@ -16,7 +16,7 @@ const Broadcast = () => {
         />
       </a>
 
-      <a href="" target="_blank" rel="noopener noreferrer">
+      <a href="https://drive.google.com/file/d/1KBD1nOf86jgfCiY_Du76m2Aqv5766WB_/view?usp=sharing" target="_blank" rel="noopener noreferrer">
         <img
           src="/images/downloadForWindows.png"
           alt="Download Executable"
