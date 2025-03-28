@@ -81,7 +81,7 @@ const Broadcast = () => {
       {/* insert a button to download executable */}
       <h2>Please click the link below to download a Whatsapp broadcast application</h2>
       
-      <a href="https://drive.google.com/file/d/1Zviy-IXpezoMNxSNwCKl0vEirMbusgCJ/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+      <a href="https://drive.google.com/file/d/1yi5rsBim-xESrA14xWdtVFo_dP4Jh9V-/view?usp=sharing" target="_blank" rel="noopener noreferrer">
         <img
           src="/images/downloadForMac.png"
           alt="Download Executable"
