@@ -4,7 +4,6 @@ import gspread
 from google.oauth2.service_account import Credentials
 from flask_cors import CORS
 import pywhatkit as pk
-import pyautogui
 import os
 import threading
 
@@ -121,11 +120,9 @@ def send_messages():
             try:
                 if message:
                     pk.sendwhatmsg_instantly(number, message)
-                    pyautogui.press("enter")
 
                 if image_path and os.path.exists(image_path):
                     pk.sendwhats_image(number, image_path, "Image Sent")
-                    pyautogui.press("enter")
 
             except Exception as e:
                 print(f"Error sending to {number}: {e}")
