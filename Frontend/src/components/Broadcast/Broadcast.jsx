@@ -1,83 +1,95 @@
-import React, { useState } from "react";
-import axios from "../../axios/axiosConfig";
+import React from "react";
 
 const Broadcast = () => {
-  const [numbersFile, setNumbersFile] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState("");
 
-  const handleFileUpload = async (file, type) => {
-    const formData = new FormData();
-    formData.append("file", file);
+  // const handleFileUpload = async (file, type) => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
 
-    try {
-      const response = await axios.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (type === "numbers") setNumbersFile(response.data.file_path);
+  //   try {
+  //     const response = await axios.post("/upload", formData, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+  //     if (type === "numbers") setNumbersFile(response.data.file_path);
 
-      console.log(response.data.file_path);
-      console.log(response.data.message);
-      if (type === "image") setImageFile(response.data.file_path);
-      setStatus(response.data.message);
-    } catch (error) {
-      setStatus("Error uploading file");
-    }
-  };
+  //     console.log(response.data.file_path);
+  //     console.log(response.data.message);
+  //     if (type === "image") setImageFile(response.data.file_path);
+  //     setStatus(response.data.message);
+  //   } catch (error) {
+  //     setStatus("Error uploading file");
+  //   }
+  // };
 
-  const handleSendMessages = async () => {
-    console.log(numbersFile, message, imageFile);
-    if (!numbersFile || (!message && !imageFile)) {
-      setStatus("Please provide all required inputs");
-      return;
-    }
+  // const handleSendMessages = async () => {
+  //   console.log(numbersFile, message, imageFile);
+  //   if (!numbersFile || (!message && !imageFile)) {
+  //     setStatus("Please provide all required inputs");
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.post("/send-messages", {
-        numbers_file: numbersFile,
-        message,
-        image_path: imageFile,
-      });
-      setStatus(response.data.message);
-    } catch (error) {
-      setStatus("Error sending messages");
-    }
-  };
+  //   try {
+  //     const response = await axios.post("/send-messages", {
+  //       numbers_file: numbersFile,
+  //       message,
+  //       image_path: imageFile,
+  //     });
+  //     setStatus(response.data.message);
+  //   } catch (error) {
+  //     setStatus("Error sending messages");
+  //   }
+  // };
+  // const handleSendMessages = async () => {
+  //   console.log(numbersFile, message, imageFile);
+  //   if (!numbersFile || (!message && !imageFile)) {
+  //     setStatus("Please provide all required inputs");
+  //     return;
+  //   }
 
+  //   if (!numbersFile) {
+  //     setStatus("❌ Please upload a valid numbers file.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.get("/get_whatsapp_numbers");
+  //     const phoneNumbers = response.data.whatsapp_numbers;
+
+  //     if (phoneNumbers.length === 0) {
+  //       setStatus("❌ No valid WhatsApp numbers found.");
+  //       return;
+  //     }
+
+  //     setStatus("📩 Opening WhatsApp Web...");
+  //     phoneNumbers.forEach((number, index) => {
+  //       setTimeout(() => {
+  //         const encodedMessage = encodeURIComponent(message);
+  //         const url = `https://wa.me/${number}?text=${encodedMessage}`;
+  //         window.open(url, "_blank");
+  //       }, index * 3000); // Opens a new tab every 3 seconds
+  //     });
+
+  //     setStatus(`✅ Opened ${phoneNumbers.length} WhatsApp chats.`);
+  //   } catch (error) {
+  //     setStatus("❌ Error fetching WhatsApp numbers.");
+  //   }
+  // };
+  
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <h1>WhatsApp Broadcast</h1>
-      <div>
-        <label>Upload Numbers File:</label>
-        <input
-          type="file"
-          accept=".txt"
-          onChange={(e) => handleFileUpload(e.target.files[0], "numbers")}
+      <h1>Broadcast Messages</h1>
+      {/* insert a button to download executable */}
+      <h2>Please click the link below to download a Whatsapp broadcast application</h2>
+      
+      <a href="https://drive.google.com/file/d/1Zviy-IXpezoMNxSNwCKl0vEirMbusgCJ/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <img
+          src="/images/downloadForMac.png"
+          alt="Download Executable"
+          style={{ cursor: "pointer", marginTop: "20px" }}
         />
-      </div>
-      <br></br>
-      <div>
-        <label>Upload Image (Optional):</label>
-        <input
-          type="file"
-          accept=".jpg"
-          onChange={(e) => handleFileUpload(e.target.files[0], "image")}
-        />
-      </div>
-      <br></br>
-      <div>
-        <label>Enter Message:</label>
-        <textarea
-          rows="4"
-          cols="50"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-      </div>
+      </a>
 
-      <button onClick={handleSendMessages}>Send Messages</button>
-      {status && <p>{status}</p>}
+      <p><b>For mac users: </b>Go to the location this file was downloaded and open a terminal. Type <b>"chmod +x ./gui"</b> to make the file runnable. Press the enter key and then type <b>"./exe" </b>. From there, follow the instructions on the application. </p>
     </div>
   );
 };
