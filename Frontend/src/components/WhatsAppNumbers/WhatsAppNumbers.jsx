@@ -8,7 +8,7 @@ const WhatsAppNumbers = ({ numbers }) => {
   const [showAlert, setShowAlert] = React.useState(false);
 
   const saveToFile = () => {
-    const formattedNumbers = numbers.join('\n');
+    const formattedNumbers = numbers.map(num => `+${num}`).join('\n'); // Prepend + to each number
     const blob = new Blob([formattedNumbers], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -16,7 +16,7 @@ const WhatsAppNumbers = ({ numbers }) => {
     link.click();
     URL.revokeObjectURL(link.href);
     setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 3000); // Hide alert after 3 seconds
+    setTimeout(() => setShowAlert(false), 3000);
   };
 
   return (
@@ -25,13 +25,13 @@ const WhatsAppNumbers = ({ numbers }) => {
       {showAlert && <Alert severity="success">File saved successfully!</Alert>} {/* Show alert if file is saved */}
       <ul>
         {numbers.map((number, index) => (
-          <li key={index}>{number}</li>
+          <li key={index}>+{number}</li> // Prepend + here as well
         ))}
       </ul>
       <button onClick={saveToFile}>Save to .txt</button>
-      
+
       <Broacast />
-      
+
     </div>
   );
 };
