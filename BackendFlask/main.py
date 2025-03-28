@@ -3,8 +3,8 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 from flask_cors import CORS
-import subprocess  # To run the .exe file
-import time
+import pywhatkit as pk
+import os
 
 app = Flask(__name__)
 CORS(app)  # Allow all origins
@@ -72,18 +72,6 @@ def delete_resident(row_id):
         sheet = client.open_by_key(SHEET_ID).sheet1
         sheet.delete_rows(row_id)
         return jsonify({"message": "Resident deleted successfully"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-@app.route("/launch-exe", methods=["POST"])
-def launch_exe():
-    try:
-        exe_path = "/Users/ericli/WPI\ Coding/IQP/DataDashboard/Frontend/src/gui"
-        subprocess.Popen(exe_path, shell=True)
-        time.sleep(8)
-
-        # Respond after the delay
-        return jsonify({"message": "Application launched successfully!"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
