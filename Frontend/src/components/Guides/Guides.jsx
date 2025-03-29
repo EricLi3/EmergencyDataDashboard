@@ -1,7 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button, Container } from '@mui/material';
-import Grid2 from '@mui/material/Unstable_Grid2';
-
+import { Card, CardContent, CardActions,Grid, Typography, Button, Container } from '@mui/material';
 const Guides = () => {
     const links = [
         {
@@ -27,9 +25,9 @@ const Guides = () => {
                 <b>Guides</b>
             </Typography>
             <br></br>
-            <Grid2 container spacing={3}>
+            <Grid container spacing={3}>
                 {links.map((link, index) => (
-                    <Grid2 item xs={12} sm={6} md={4} key={index}>
+                    <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card
                             sx={{
                                 minHeight: 160,
@@ -65,9 +63,9 @@ const Guides = () => {
                                 </Button>
                             </CardActions>
                         </Card>
-                    </Grid2>
+                    </Grid>
                 ))}
-            </Grid2>
+            </Grid>
         </Container>
     );
 };
