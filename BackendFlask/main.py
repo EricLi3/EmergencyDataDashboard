@@ -14,10 +14,10 @@ client = gspread.authorize(creds)
 
 SHEET_ID = "1dTDd8Xwg3wv7MRHG2WAX_vXZKlEFne_rDMeemcHSD3s"
 
-# Fetch the latest data from Google Sheets
-def fetch_data():
-    """Fetches the latest data from Google Sheets into a DataFrame"""
-    sheet = client.open_by_key(SHEET_ID).sheet1
+# Fetch the latest data from a specific sheet
+def fetch_data(sheet_name):
+    """Fetches the latest data from a specific sheet in Google Sheets into a DataFrame"""
+    sheet = client.open_by_key(SHEET_ID).worksheet(sheet_name)
     data = sheet.get_all_records()
     return pd.DataFrame(data)
 
@@ -26,17 +26,18 @@ def fetch_data():
 def get_residents():
     """Returns all residents' data directly from Google Sheets"""
     try:
-        df = fetch_data()
+        df = fetch_data("Enrollement")
         return jsonify(df.to_dict(orient='records'))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
 # Route: Fetch WhatsApp numbers
 @app.route("/get_whatsapp_numbers", methods=["GET"])
 def get_whatsapp_numbers():
     """Returns list of WhatsApp numbers directly from Google Sheets"""
     try:
-        df = fetch_data()
+        df = fetch_data("Enrollement")
 
         # Ensure all values are strings before using .str operations
         df["Would you like to receive important WhatsApp alerts?"] = df["Would you like to receive important WhatsApp alerts?"].fillna('').astype(str).str.lower()
@@ -70,6 +71,63 @@ def delete_resident(row_id):
         sheet = client.open_by_key(SHEET_ID).sheet1
         sheet.delete_rows(row_id)
         return jsonify({"message": "Resident deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Route: Fetch all inventory items
+@app.route("/get_inventory", methods=["GET"])
+def get_inventory():
+    """Returns all inventory items from the Inventory sheet"""
+    try:
+        df = fetch_data("Inventory")  # Replace "Inventory" with your sheet name
+        return jsonify(df.to_dict(orient='records'))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Route: Add a new inventory item
+@app.route("/add_inventory_item", methods=["POST"])
+def add_inventory_item():
+    """Adds a new item to the Inventory sheet"""
+    try:
+        data = request.json
+        item_name = data.get("Item name")
+        quantity = data.get("Quantity")
+
+        if not item_name or quantity is None:
+            return jsonify({"error": "Item name and Quantity are required"}), 400
+
+        sheet = client.open_by_key(SHEET_ID).worksheet("Inventory")
+        sheet.append_row([item_name, quantity])
+        return jsonify({"message": "Item added successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Route: Update an inventory item
+@app.route("/update_inventory_item/<int:row_id>", methods=["PUT"])
+def update_inventory_item(row_id):
+    """Updates an inventory item in the Inventory sheet"""
+    try:
+        data = request.json
+        item_name = data.get("Item name")
+        quantity = data.get("Quantity")
+
+        if not item_name or quantity is None:
+            return jsonify({"error": "Item name and Quantity are required"}), 400
+
+        sheet = client.open_by_key(SHEET_ID).worksheet("Inventory")
+        sheet.update(f'A{row_id}:B{row_id}', [[item_name, quantity]])
+        return jsonify({"message": "Item updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Route: Delete an inventory item
+@app.route("/delete_inventory_item/<int:row_id>", methods=["DELETE"])
+def delete_inventory_item(row_id):
+    """Deletes an inventory item from the Inventory sheet"""
+    try:
+        sheet = client.open_by_key(SHEET_ID).worksheet("Inventory")
+        sheet.delete_rows(row_id)
+        return jsonify({"message": "Item deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
