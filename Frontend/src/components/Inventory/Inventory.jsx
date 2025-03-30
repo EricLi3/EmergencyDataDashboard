@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../axios/axiosConfig';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle
+    Button, TextField
 } from '@mui/material';
+import { Add, Remove } from '@mui/icons-material';
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemQuantity, setnewItemQuantity] = useState(0);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selectedRowId, setSelectedRowId] = useState(null);
-    const [updatedQuantity, setUpdatedQuantity] = useState(0);
 
     const fetchInventory = async () => {
         try {
@@ -27,7 +25,7 @@ const Inventory = () => {
             console.error("Error fetching inventory:", error);
             alert("Failed to fetch inventory.");
         }
-    }
+    };
 
     const addInventoryItem = async () => {
         if (!newItemName || !newItemQuantity) {
@@ -55,27 +53,36 @@ const Inventory = () => {
         }
     };
 
-    const updateInventoryItem = async () => {
-        if (!updatedQuantity) {
-            alert("Please provide a valid quantity.");
+    const updateInventoryQuantity = async (rowId, newQuantity) => {
+        if (newQuantity < 0) {
+            alert("Quantity cannot be negative.");
             return;
         }
 
+        // Optimistically update the UI
+        const updatedItems = [...items];
+        const itemIndex = rowId - 2; // Adjust index to match the array
+        const originalQuantity = updatedItems[itemIndex]["Quantity"];
+        updatedItems[itemIndex]["Quantity"] = newQuantity;
+        setItems(updatedItems);
+
         try {
-            const response = await axios.put(`/update_inventory_item/${selectedRowId}`, {
-                "Item name": items.find((item, index) => index + 2 === selectedRowId)["Item Name"],
-                "Quantity": updatedQuantity,
+            const response = await axios.put(`/update_inventory_item/${rowId}`, {
+                "Item name": updatedItems[itemIndex]["Item Name"],
+                "Quantity": newQuantity,
             });
 
-            if (response.status === 200) {
-                alert("Item updated successfully!");
-                fetchInventory();
-                handleCloseDialog();
-            } else {
+            if (response.status !== 200) {
+                // Revert the change if the server request fails
+                updatedItems[itemIndex]["Quantity"] = originalQuantity;
+                setItems(updatedItems);
                 console.error("Error updating item:", response.data);
                 alert("Failed to update item.");
             }
         } catch (error) {
+            // Revert the change if the server request fails
+            updatedItems[itemIndex]["Quantity"] = originalQuantity;
+            setItems(updatedItems);
             console.error("Error updating item:", error);
         }
     };
@@ -95,23 +102,9 @@ const Inventory = () => {
         }
     };
 
-    const handleOpenDialog = (rowId, itemName, currentQuantity) => {
-        setSelectedRowId(rowId);
-        setUpdatedQuantity(currentQuantity);
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setSelectedRowId(null);
-        setUpdatedQuantity(0);
-    };
-
     useEffect(() => {
         fetchInventory();
-    }
-        , []);
-
+    }, []);
 
     return (
         <div>
@@ -130,7 +123,23 @@ const Inventory = () => {
                         {items.map((item, index) => (
                             <TableRow key={index}>
                                 <TableCell>{item["Item Name"]}</TableCell>
-                                <TableCell>{item["Quantity"]}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        onClick={() => updateInventoryQuantity(index + 2, item["Quantity"] - 1)}
+                                        color="secondary"
+                                        size="small"
+                                    >
+                                        <Remove />
+                                    </Button>
+                                    {item["Quantity"]}
+                                    <Button
+                                        onClick={() => updateInventoryQuantity(index + 2, item["Quantity"] + 1)}
+                                        color="primary"
+                                        size="small"
+                                    >
+                                        <Add />
+                                    </Button>
+                                </TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
@@ -138,14 +147,6 @@ const Inventory = () => {
                                         onClick={() => deleteInventoryItem(index + 2)}
                                     >
                                         Remove
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        style={{ marginLeft: '10px' }}
-                                        onClick={() => handleOpenDialog(index + 2, item["Item Name"], item["Quantity"])}
-                                    >
-                                        Update Quantity
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -177,27 +178,6 @@ const Inventory = () => {
                     Add Item
                 </Button>
             </div>
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Update Quantity</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="New Quantity"
-                        type="number"
-                        variant="outlined"
-                        value={updatedQuantity}
-                        onChange={(e) => setUpdatedQuantity(e.target.value)}
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={updateInventoryItem} color="primary">
-                        Update
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </div>
     );
 };
