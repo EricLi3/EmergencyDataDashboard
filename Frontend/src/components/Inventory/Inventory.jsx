@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../axios/axiosConfig';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    Button, TextField
+    Button, TextField, TableSortLabel
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
+    const [filteredItems, setFilteredItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemQuantity, setnewItemQuantity] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isAscending, setIsAscending] = useState(true);
 
     const fetchInventory = async () => {
         try {
@@ -17,6 +20,7 @@ const Inventory = () => {
             if (response.status === 200) {
                 const data = await response.data;
                 setItems(data);
+                setFilteredItems(data); // Initialize filteredItems with the full inventory
             } else {
                 console.error("Error fetching inventory:", response.statusText);
                 alert("Failed to fetch inventory.");
@@ -65,6 +69,7 @@ const Inventory = () => {
         const originalQuantity = updatedItems[itemIndex]["Quantity"];
         updatedItems[itemIndex]["Quantity"] = newQuantity;
         setItems(updatedItems);
+        setFilteredItems(updatedItems); // Update filteredItems as well
 
         try {
             const response = await axios.put(`/update_inventory_item/${rowId}`, {
@@ -76,6 +81,7 @@ const Inventory = () => {
                 // Revert the change if the server request fails
                 updatedItems[itemIndex]["Quantity"] = originalQuantity;
                 setItems(updatedItems);
+                setFilteredItems(updatedItems); // Revert filteredItems as well
                 console.error("Error updating item:", response.data);
                 alert("Failed to update item.");
             }
@@ -83,6 +89,7 @@ const Inventory = () => {
             // Revert the change if the server request fails
             updatedItems[itemIndex]["Quantity"] = originalQuantity;
             setItems(updatedItems);
+            setFilteredItems(updatedItems); // Revert filteredItems as well
             console.error("Error updating item:", error);
         }
     };
@@ -102,6 +109,34 @@ const Inventory = () => {
         }
     };
 
+    const handleSearch = (e) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+
+        if (query === '') {
+            // If the search query is empty, reset to the full list
+            setFilteredItems(items);
+        } else {
+            // Filter items based on the search query
+            const filtered = items.filter(item =>
+                item["Item Name"].toLowerCase().includes(query)
+            );
+            setFilteredItems(filtered);
+        }
+    };
+
+    const handleSort = () => {
+        setIsAscending(!isAscending);
+        const sortedItems = [...filteredItems].sort((a, b) => {
+            if (isAscending) {
+                return a["Item Name"].localeCompare(b["Item Name"]);
+            } else {
+                return b["Item Name"].localeCompare(a["Item Name"]);
+            }
+        });
+        setFilteredItems(sortedItems);
+    };
+
     useEffect(() => {
         fetchInventory();
     }, []);
@@ -110,17 +145,32 @@ const Inventory = () => {
         <div>
             <hr></hr>
             <h1>Inventory:</h1>
+            <TextField
+                label="Search Items"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearch}
+                style={{ marginBottom: '20px', width: '100%' }}
+            />
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell><b>Item Name</b></TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={true}
+                                    direction={isAscending ? 'asc' : 'desc'}
+                                    onClick={handleSort}
+                                >
+                                    <b>Item Name</b>
+                                </TableSortLabel>
+                            </TableCell>
                             <TableCell><b>Quantity</b></TableCell>
                             <TableCell><b>Actions</b></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {items.map((item, index) => (
+                        {filteredItems.map((item, index) => (
                             <TableRow key={index}>
                                 <TableCell>{item["Item Name"]}</TableCell>
                                 <TableCell>
