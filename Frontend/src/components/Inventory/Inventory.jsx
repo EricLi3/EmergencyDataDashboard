@@ -13,6 +13,8 @@ const Inventory = () => {
     const [newItemQuantity, setnewItemQuantity] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [isAscending, setIsAscending] = useState(true);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editingName, setEditingName] = useState('');
 
     const fetchInventory = async () => {
         try {
@@ -94,6 +96,36 @@ const Inventory = () => {
         }
     };
 
+    const updateItemName = async (index, newName) => {
+        const updatedItems = [...items];
+        const originalName = updatedItems[index]["Item Name"];
+        updatedItems[index]["Item Name"] = newName;
+        setItems(updatedItems);
+        setFilteredItems(updatedItems); // Update filteredItems as well
+
+        try {
+            const response = await axios.put(`/update_inventory_item/${index + 2}`, {
+                "Item name": newName,
+                "Quantity": updatedItems[index]["Quantity"],
+            });
+
+            if (response.status !== 200) {
+                // Revert the change if the server request fails
+                updatedItems[index]["Item Name"] = originalName;
+                setItems(updatedItems);
+                setFilteredItems(updatedItems); // Revert filteredItems as well
+                console.error("Error updating item name:", response.data);
+                alert("Failed to update item name.");
+            }
+        } catch (error) {
+            // Revert the change if the server request fails
+            updatedItems[index]["Item Name"] = originalName;
+            setItems(updatedItems);
+            setFilteredItems(updatedItems); // Revert filteredItems as well
+            console.error("Error updating item name:", error);
+        }
+    };
+
     const deleteInventoryItem = async (rowId) => {
         try {
             const response = await axios.delete(`/delete_inventory_item/${rowId}`);
@@ -137,6 +169,19 @@ const Inventory = () => {
         setFilteredItems(sortedItems);
     };
 
+    const handleDoubleClick = (index) => {
+        setEditingIndex(index);
+        setEditingName(filteredItems[index]["Item Name"]);
+    };
+
+    const handleBlur = (index) => {
+        if (editingName.trim() !== '') {
+            updateItemName(index, editingName);
+        }
+        setEditingIndex(null);
+        setEditingName('');
+    };
+
     useEffect(() => {
         fetchInventory();
     }, []);
@@ -172,8 +217,21 @@ const Inventory = () => {
                     <TableBody>
                         {filteredItems.map((item, index) => (
                             <TableRow key={index}>
-                                <TableCell>{item["Item Name"]}</TableCell>
-                                <TableCell>
+                                <TableCell onDoubleClick={() => handleDoubleClick(index)}>
+                                    {editingIndex === index ? (
+                                        <TextField
+                                            value={editingName}
+                                            onChange={(e) => setEditingName(e.target.value)}
+                                            onBlur={() => handleBlur(index)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleBlur(index);
+                                            }}
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        item["Item Name"]
+                                    )}
+                                </TableCell>                                <TableCell>
                                     <Button
                                         onClick={() => updateInventoryQuantity(index + 2, item["Quantity"] - 1)}
                                         color="secondary"
