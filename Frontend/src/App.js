@@ -9,11 +9,13 @@ import Workflow from "./components/Workflow/Workflow";
 import Inventory from "./components/Inventory/Inventory";
 import Guides from "./components/Guides/Guides";
 import instance from "./axios/axiosConfig";
+import Groups from "./components/Groups/Groups";
 import "./App.css";
 
 function App() {
   const [residents, setResidents] = useState([]);
   const [whatsappNumbers, setWhatsappNumbers] = useState([]);
+  const [contactGroups, setContactGroups] = useState([]);
   const [loading, setLoading] = useState(true);
 
 
@@ -40,9 +42,19 @@ function App() {
     }
   };
 
+  const fetchContactGroups = async () => {
+    try {
+      const response = await instance.get("/get_groups");
+      setContactGroups(response.data);
+    } catch (error) {
+      console.error("Error fetching contact groups!", error);
+    }
+  }
+
   useEffect(() => {
     fetchResidents();
     fetchWhatsAppNumbers();
+    fetchContactGroups();
   }, []);
 
   return (
@@ -57,6 +69,7 @@ function App() {
           <Route path="/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
           <Route path="/map" element={<Map />} />
           <Route path="/workflow" element={<Workflow />} />
+          <Route path="/groups" element={<Groups groups={contactGroups} fetchContactGroups={fetchContactGroups} />} />
         </Routes>
       </Router>
     </div>

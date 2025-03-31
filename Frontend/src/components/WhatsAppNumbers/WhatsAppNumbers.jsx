@@ -4,7 +4,8 @@ import Alert from '@mui/material/Alert';
 import Broacast from '../Broadcast/Broadcast';
 
 const WhatsAppNumbers = ({ numbers }) => {
-
+  // TODO: make a google sheets with numbers under a group. Similar to inventory with a comma delimter. 
+  
   const [showAlert, setShowAlert] = React.useState(false);
 
   const saveToFile = () => {
