@@ -231,7 +231,8 @@ const Inventory = () => {
                                     ) : (
                                         item["Item Name"]
                                     )}
-                                </TableCell>                                <TableCell>
+                                </TableCell>
+                                <TableCell>
                                     <Button
                                         onClick={() => updateInventoryQuantity(index + 2, item["Quantity"] - 1)}
                                         color="secondary"

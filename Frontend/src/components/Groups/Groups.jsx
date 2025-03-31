@@ -187,7 +187,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
               <StyledTableRow key={index}>
 
                 <StyledTableCell onDoubleClick={() => handleDoubleClickName(index)}>
-                  {editingIndex === index ? (
+                  {editingIndex === index && editingName !== '' ? (
                     <TextField
                       value={editingName}
                       onChange={(e) => setEditingName(e.target.value)}
@@ -203,7 +203,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
                 </StyledTableCell>
 
                 <StyledTableCell onDoubleClick={() => handleDoubleClickNumbers(index)}>
-                  {editingIndex === index ? (
+                  {editingIndex === index && editingNumbers !== '' ? (
                     <TextField
                       value={editingNumbers}
                       onChange={(e) => setEditingNumbers(e.target.value)}
@@ -214,7 +214,9 @@ const Groups = ({ groups, fetchContactGroups }) => {
                       autoFocus
                     />
                   ) : (
-                    group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join(", ")
+                    typeof group.Phone_Numbers === 'string'
+                      ? group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join(", ")
+                      : `+${group.Phone_Numbers.toString().trim()}`
                   )}
                 </StyledTableCell>
 
