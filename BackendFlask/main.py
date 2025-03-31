@@ -130,6 +130,65 @@ def delete_inventory_item(row_id):
         return jsonify({"message": "Item deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# Important Phone Number groups
+
+# Route: Fetch all inventory items
+@app.route("/get_groups", methods=["GET"])
+def get_groups():
+    """Returns all Phone Number Groups from the Important_Contacts_Groups sheet"""
+    try:
+        df = fetch_data("Important_Contact_Groups")  # Replace "Inventory" with your sheet name
+        return jsonify(df.to_dict(orient='records'))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Route: Add a new inventory item
+@app.route("/add_contact_group", methods=["POST"])
+def add_contact_group():
+    """Adds a new group to the Important_Contacts_Groups sheet"""
+    try:
+        data = request.json
+        item_name = data.get("Group_Name")
+        quantity = data.get("Phone_Numbers")
+
+        if not item_name or quantity is None:
+            return jsonify({"error": "Group_Name and Phone_Numbers are required"}), 400
+
+        sheet = client.open_by_key(SHEET_ID).worksheet("Important_Contact_Groups")
+        sheet.append_row([item_name, quantity])
+        return jsonify({"message": "Group added successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Route: Update an inventory item
+@app.route("/update_contact_group/<int:row_id>", methods=["PUT"])
+def update_contact_group(row_id):
+    """Updates a contact group the Important_Contact_Groups sheet"""
+    try:
+        data = request.json
+        item_name = data.get("Group_Name")
+        quantity = data.get("Phone_Numbers")
+
+        if not item_name or quantity is None:
+            return jsonify({"error": "Group_Name and Phone_Numbers are required"}), 400
+
+        sheet = client.open_by_key(SHEET_ID).worksheet("Important_Contact_Groups")
+        sheet.update(f'A{row_id}:B{row_id}', [[item_name, quantity]])
+        return jsonify({"message": "Group updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Route: Delete an inventory item
+@app.route("/delete_contact_group/<int:row_id>", methods=["DELETE"])
+def delete_contact_group(row_id):
+    """Deletes a contact group from the Important_Contact_Groups sheet"""
+    try:
+        sheet = client.open_by_key(SHEET_ID).worksheet("Important_Contact_Groups")
+        sheet.delete_rows(row_id)
+        return jsonify({"message": "Contact Group deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
 if __name__ == "__main__":
     app.run(debug=True)

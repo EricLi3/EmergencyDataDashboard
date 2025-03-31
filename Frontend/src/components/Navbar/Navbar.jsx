@@ -23,6 +23,9 @@ const Navbar = () => {
             <Link to="/whatsapp" className="nav-link">WhatsApp Numbers</Link>
           </li>
           <li className="nav-item">
+            <Link to="/groups" className="nav-link">Groups</Link>
+          </li>
+          <li className="nav-item">
             <Link to="/workflow" className="nav-link">Workflow</Link>
           </li>
           <li className="nav-item">
