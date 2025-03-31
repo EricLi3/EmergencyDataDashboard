@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TextField from '@mui/material/TextField';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -34,6 +35,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Groups = ({ groups, fetchContactGroups }) => {
+  const [newGroupName, setNewGroupName] = useState('');
+  const [newNumbers, setNewNumbers] = useState('');
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingName, setEditingName] = useState('');
+  const [editingNumbers, setEditingNumbers] = useState('');
+
 
   const handleDelete = async (rowId) => {
     console.log(`Attempting to delete resident with row ID: ${rowId}`);
@@ -75,6 +82,85 @@ const Groups = ({ groups, fetchContactGroups }) => {
     saveToFile(txtContent, `${group.Group_Name.replace(/\s+/g, "_")}.txt`);
   };
 
+  const addGroup = async () => {
+    if (!newGroupName || !newNumbers) {
+      alert('Please provide both group name and phone numbers.');
+      return;
+    }
+
+    try {
+      await axios.post('/add_contact_group', {
+        Group_Name: newGroupName,
+        Phone_Numbers: newNumbers,
+      });
+      fetchContactGroups(); // Refresh the group list after adding
+      setNewGroupName('');
+      setNewNumbers('');
+    } catch (error) {
+      console.error('Error adding group:', error);
+    }
+  };
+
+  const updateGroupName = async (index, newName) => {
+    const updatedGroups = [...groups];
+    const originalName = updatedGroups[index].Group_Name;
+    updatedGroups[index].Group_Name = newName;
+
+    try {
+      await axios.put(`/update_contact_group/${index + 2}`, {
+        Group_Name: newName,
+        Phone_Numbers: updatedGroups[index].Phone_Numbers,
+      });
+      fetchContactGroups(); // Refresh the group list after updating
+    } catch (error) {
+      console.error('Error updating group name:', error);
+      updatedGroups[index].Group_Name = originalName; // Revert on failure
+    }
+  };
+
+  const updateGroupNumbers = async (index, newNumbers) => {
+    const updatedGroups = [...groups];
+    const originalNumbers = updatedGroups[index].Phone_Numbers;
+    updatedGroups[index].Phone_Numbers = newNumbers;
+
+    try {
+      await axios.put(`/update_contact_group/${index + 2}`, {
+        Group_Name: updatedGroups[index].Group_Name,
+        Phone_Numbers: newNumbers,
+      });
+      fetchContactGroups(); // Refresh the group list after updating
+    } catch (error) {
+      console.error('Error updating phone numbers:', error);
+      updatedGroups[index].Phone_Numbers = originalNumbers; // Revert on failure
+    }
+  };
+
+  const handleDoubleClickName = (index) => {
+    setEditingIndex(index);
+    setEditingName(groups[index].Group_Name);
+  };
+
+  const handleDoubleClickNumbers = (index) => {
+    setEditingIndex(index);
+    setEditingNumbers(groups[index].Phone_Numbers.toString()); // Convert to string for editing
+  };
+
+  const handleBlurName = (index) => {
+    if (editingName.trim() !== '') {
+      updateGroupName(index, editingName);
+    }
+    setEditingIndex(null);
+    setEditingName('');
+  };
+
+  const handleBlurNumbers = (index) => {
+    if (editingNumbers.trim() !== '') {
+      updateGroupNumbers(index, editingNumbers);
+    }
+    setEditingIndex(null);
+    setEditingNumbers('');
+  };
+
   return (
     <div className="group-list">
       <h1>Groups</h1>
@@ -99,12 +185,39 @@ const Groups = ({ groups, fetchContactGroups }) => {
           <TableBody>
             {groups.map((group, index) => (
               <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row">
-                  {group.Group_Name}
+
+                <StyledTableCell onDoubleClick={() => handleDoubleClickName(index)}>
+                  {editingIndex === index ? (
+                    <TextField
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                      onBlur={() => handleBlurName(index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleBlurName(index);
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    group.Group_Name
+                  )}
                 </StyledTableCell>
-                <StyledTableCell>
-                  {group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join(", ")}
+
+                <StyledTableCell onDoubleClick={() => handleDoubleClickNumbers(index)}>
+                  {editingIndex === index ? (
+                    <TextField
+                      value={editingNumbers}
+                      onChange={(e) => setEditingNumbers(e.target.value)}
+                      onBlur={() => handleBlurNumbers(index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleBlurNumbers(index);
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join(", ")
+                  )}
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <Button
                     variant="contained"
@@ -128,6 +241,26 @@ const Groups = ({ groups, fetchContactGroups }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div style={{ marginTop: '20px' }}>
+        <h2>Add New Group</h2>
+        <TextField
+          label="Group Name"
+          variant="outlined"
+          value={newGroupName}
+          onChange={(e) => setNewGroupName(e.target.value)}
+          style={{ marginRight: '10px' }}
+        />
+        <TextField
+          label="Phone Numbers (comma-separated)"
+          variant="outlined"
+          value={newNumbers}
+          onChange={(e) => setNewNumbers(e.target.value.toString())}
+          style={{ marginRight: '10px' }}
+        />
+        <Button variant="contained" color="primary" onClick={addGroup}>
+          Add Group
+        </Button>
+      </div>
     </div>
   );
 };
