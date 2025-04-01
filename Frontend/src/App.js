@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ResidentList from "./components/ResidentList/Resident_list";
 import PersonProfile from "./components/PersonProfile/Person_profile";
@@ -59,6 +60,7 @@ function App() {
 
   return (
     <div className="App">
+      <Analytics />
       <Router>
         <Navbar />
         <Routes>
