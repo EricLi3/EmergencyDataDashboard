@@ -17,6 +17,11 @@ const Guides = () => {
             url: 'https://bpb-us-w2.wpmucdn.com/wp.wpi.edu/dist/e/203/files/2023/05/WPI-Fondita-My-Maps-Facilitators-Guide.pdf',
             image: "/images/google_maps_logo.png"
         },
+        {
+            title: "Signup.com Tutorial",
+            url: "https://signup.com/Video/VideoTour",
+            image: "/images/signup.png"
+        }
     ];
 
     return (
