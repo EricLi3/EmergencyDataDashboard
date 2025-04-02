@@ -25,7 +25,7 @@ const Guides = () => {
         {
             title: "Preparing your Household",
             url: "https://docs.google.com/document/d/1T_Akf8E7GPLcp-cUvguSpTWHP-dBCMAkxt2y1jRdwLs/edit?usp=sharing",
-            images: "/images/housePrep.png"
+            image: "/images/housePrep.png"
         },
     ];
 
