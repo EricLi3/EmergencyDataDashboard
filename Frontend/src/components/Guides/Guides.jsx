@@ -4,17 +4,17 @@ const Guides = () => {
     const links = [
         {
             title: 'Google Forms Tutorial',
-            url: 'https://support.google.com/docs/answer/6281888?hl=en&co=GENIE.Platform%3DDesktop',
+            url: 'https://www.youtube.com/watch?v=PrnH8qLuf1Y',
             image: "/images/google_forms_logo.png"
         },
         {
             title: 'Google Sheets Tutorial',
-            url: 'https://support.google.com/a/users/answer/9282959',
+            url: 'https://www.youtube.com/watch?v=wbzz-8SyMT8',
             image: "/images/google_sheets_logo.png"
         },
         {
             title: 'Google Maps Tutorial',
-            url: 'https://bpb-us-w2.wpmucdn.com/wp.wpi.edu/dist/e/203/files/2023/05/WPI-Fondita-My-Maps-Facilitators-Guide.pdf',
+            url: 'https://www.youtube.com/watch?v=YbtIzQ6Y4CY',
             image: "/images/google_maps_logo.png"
         },
         {
