@@ -3,6 +3,11 @@ import { Card, CardContent, CardActions,Grid, Typography, Button, Container } fr
 const Guides = () => {
     const links = [
         {
+            title: 'Google Drive Tutorial',
+            url: "https://www.youtube.com/watch?v=xD__SUfXEv0&list=PLomN84AdULIB0dE8eOCkeCfGsYj_EDksO&index=2",
+            image: "/images/google_drive.png"
+        },
+        {
             title: 'Google Forms Tutorial',
             url: 'https://www.youtube.com/watch?v=PrnH8qLuf1Y',
             image: "/images/google_forms_logo.png"
