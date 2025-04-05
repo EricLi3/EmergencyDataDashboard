@@ -78,7 +78,7 @@ const ResidentList = ({ residents, fetchResidents }) => {
                   <StyledTableCell component="th" scope="row">
                     {resident["Name of main point of contact (ex. John Smith)"] || "N/A"}
                   </StyledTableCell>
-                  <StyledTableCell>{email}</StyledTableCell>
+                  <StyledTableCell>{email || "N/A"}</StyledTableCell>
                   <StyledTableCell>{resident["Address"] || "N/A"}</StyledTableCell>
                   <StyledTableCell>{resident["Number of Residents in Household"] || "N/A"}</StyledTableCell>
                   <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"] || "0"}</StyledTableCell>
