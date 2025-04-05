@@ -76,18 +76,18 @@ const ResidentList = ({ residents, fetchResidents }) => {
               return (
                 <StyledTableRow key={index}>
                   <StyledTableCell component="th" scope="row">
-                    {resident["Name of main point of contact (ex. John Smith)"]}
+                    {resident["Name of main point of contact (ex. John Smith)"] || "N/A"}
                   </StyledTableCell>
                   <StyledTableCell>{email}</StyledTableCell>
-                  <StyledTableCell>{resident["Address"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Number of Residents in Household"]}</StyledTableCell>
-                  <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"]}</StyledTableCell>
-                  <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"]}</StyledTableCell>
-                  <StyledTableCell>+{resident["Phone Number"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Skills"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"]}</StyledTableCell>
-                  <StyledTableCell>{resident["Would you like to volunteer?"]}</StyledTableCell>
+                  <StyledTableCell>{resident["Address"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["Number of Residents in Household"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"] || "0"}</StyledTableCell>
+                  <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"] || "0"}</StyledTableCell>
+                  <StyledTableCell>+{resident["Phone Number"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["Skills"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"] || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{resident["Would you like to volunteer?"] || "N/A"}</StyledTableCell>
                   <StyledTableCell align="right">
                     <Link to={`/profile/${index}`}>
                       View Profile
