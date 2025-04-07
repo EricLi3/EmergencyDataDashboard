@@ -14,7 +14,15 @@ const Map = () => {
                 loading="lazy"
                 title="Master Maps"
             ></iframe>
-
+            <iframe 
+                src="https://www.google.com/maps/d/u/0/embed?mid=1ftp1OHpSv_MlQHfXJcm6WdjzJ0MHG0I&ehbc=2E312F" 
+                width="940"
+                height="680"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                title="Public Facilities Map"
+            ></iframe>
             <iframe 
                 src="https://www.google.com/maps/d/u/0/embed?mid=1wn_DatPEL8_EOz29NJWEOdsOKjzyovc&ehbc=2E312F" 
                 width="940"
