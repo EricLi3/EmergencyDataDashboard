@@ -43,7 +43,7 @@ def get_whatsapp_numbers():
         df["Would you like to receive important WhatsApp alerts?"] = df["Would you like to receive important WhatsApp alerts?"].fillna('').astype(str).str.lower()
         
         # Filter only users who want WhatsApp alerts
-        whatsapp_users = df[df["Would you like to receive important WhatsApp alerts?"] == "yes"]
+        whatsapp_users = df[df["Would you like to receive important WhatsApp alerts?"] == "Yes / Sí"]
         
         # Extract WhatsApp numbers
         numbers = whatsapp_users["Phone Number"].tolist()
