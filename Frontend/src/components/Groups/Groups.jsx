@@ -231,7 +231,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <IconButton
-                    onClick={() => handleDelete(group.id)}
+                    onClick={() => handleDelete(index+2)}
                     aria-label="delete"
                     style={{ color: red[500] }}
                   >
