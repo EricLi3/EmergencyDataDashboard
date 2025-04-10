@@ -24,7 +24,7 @@ const Guides = () => {
         },
         {
             title: "Signup.com Tutorial",
-            url: "https://signup.com/Video/VideoTour",
+            url: "https://docs.google.com/document/d/1tELaCyLX2zp9AAuuv3CUbqHlIaxudia7Duj-OpEgFJY/edit?usp=sharing",
             image: "/images/signup.png"
         },
         {
