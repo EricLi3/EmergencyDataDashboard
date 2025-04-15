@@ -1,4 +1,6 @@
 import React from "react";
+import WeatherBanner from "../WeatherBanner/WeatherBanner"; // Import the WeatherBanner component
+
 import { Link } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -49,6 +51,9 @@ const ResidentList = ({ residents, fetchResidents }) => {
 
   return (
     <div className="resident-list">
+
+      <WeatherBanner /> {/* Include the WeatherBanner component */}
+      
       <h1>Enrolled Residents</h1>
       <TableContainer component={Paper}>
         <Table>
