@@ -15,6 +15,8 @@ const Inventory = () => {
     const [isAscending, setIsAscending] = useState(true);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingName, setEditingName] = useState('');
+    const [newItemDescription, setNewItemDescription] = useState('');
+    const [editingDescription, setEditingDescription] = useState('');
 
     const fetchInventory = async () => {
         try {
@@ -34,8 +36,8 @@ const Inventory = () => {
     };
 
     const addInventoryItem = async () => {
-        if (!newItemName || !newItemQuantity) {
-            alert("Please provide both item name and quantity.");
+        if (!newItemName || !newItemQuantity || !newItemDescription) {
+            alert("Please provide item name, quantity, and description.");
             return;
         }
 
@@ -43,6 +45,7 @@ const Inventory = () => {
             const response = await axios.post('/add_inventory_item', {
                 "Item name": newItemName,
                 "Quantity": newItemQuantity,
+                "Description": newItemDescription, // Include description
             });
 
             if (response.status === 201) {
@@ -50,6 +53,7 @@ const Inventory = () => {
                 fetchInventory(); // Refresh the inventory list
                 setNewItemName('');
                 setnewItemQuantity('');
+                setNewItemDescription(''); // Clear description field
             } else {
                 console.error("Error adding item:", response.data);
                 alert("Failed to add item.");
@@ -97,6 +101,36 @@ const Inventory = () => {
     };
 
     const updateItemName = async (index, newName) => {
+        const updatedItems = [...items];
+        const originalName = updatedItems[index]["Item Name"];
+        updatedItems[index]["Item Name"] = newName;
+        setItems(updatedItems);
+        setFilteredItems(updatedItems); // Update filteredItems as well
+
+        try {
+            const response = await axios.put(`/update_inventory_item/${index + 2}`, {
+                "Item name": newName,
+                "Quantity": updatedItems[index]["Quantity"],
+            });
+
+            if (response.status !== 200) {
+                // Revert the change if the server request fails
+                updatedItems[index]["Item Name"] = originalName;
+                setItems(updatedItems);
+                setFilteredItems(updatedItems); // Revert filteredItems as well
+                console.error("Error updating item name:", response.data);
+                alert("Failed to update item name.");
+            }
+        } catch (error) {
+            // Revert the change if the server request fails
+            updatedItems[index]["Item Name"] = originalName;
+            setItems(updatedItems);
+            setFilteredItems(updatedItems); // Revert filteredItems as well
+            console.error("Error updating item name:", error);
+        }
+    };
+    // TODO: Integgrate the description field
+    const updateItemDescription = async (index, newName) => {
         const updatedItems = [...items];
         const originalName = updatedItems[index]["Item Name"];
         updatedItems[index]["Item Name"] = newName;
@@ -182,6 +216,19 @@ const Inventory = () => {
         setEditingName('');
     };
 
+    const handleDoubleClickDescription = (index) => {
+        setEditingIndex(index);
+        setEditingDescription(filteredItems[index]["Description"]);
+    };
+
+    const handleBlurDescription = (index) => {
+        if (editingDescription.trim() !== '') {
+            updateItemDescription(index, editingDescription);
+        }
+        setEditingIndex(null);
+        setEditingDescription('');
+    };
+
     useEffect(() => {
         fetchInventory();
     }, []);
@@ -211,6 +258,7 @@ const Inventory = () => {
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell><b>Quantity</b></TableCell>
+                            <TableCell><b>Description</b></TableCell>
                             <TableCell><b>Actions</b></TableCell>
                         </TableRow>
                     </TableHead>
@@ -249,6 +297,21 @@ const Inventory = () => {
                                         <Add />
                                     </Button>
                                 </TableCell>
+                                <TableCell onDoubleClick={() => handleDoubleClickDescription(index)}>
+                                    {editingIndex === index ? (
+                                        <TextField
+                                            value={editingDescription}
+                                            onChange={(e) => setEditingDescription(e.target.value)}
+                                            onBlur={() => handleBlurDescription(index)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleBlurDescription(index);
+                                            }}
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        item["Description"] || "N/A"
+                                    )}
+                                </TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
@@ -281,6 +344,13 @@ const Inventory = () => {
                     variant="outlined"
                     value={newItemQuantity}
                     onChange={(e) => setnewItemQuantity(e.target.value)}
+                    style={{ marginRight: '10px' }}
+                />
+                <TextField
+                    label="Description"
+                    variant="outlined"
+                    value={newItemDescription}
+                    onChange={(e) => setNewItemDescription(e.target.value)}
                     style={{ marginRight: '10px' }}
                 />
                 <Button variant="contained" color="primary" onClick={addInventoryItem}>
