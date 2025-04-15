@@ -17,6 +17,8 @@ const Inventory = () => {
     const [editingName, setEditingName] = useState('');
     const [newItemDescription, setNewItemDescription] = useState('');
     const [editingDescription, setEditingDescription] = useState('');
+    const [editingDescriptionIndex, setEditingDescriptionIndex] = useState(null);
+
 
     const fetchInventory = async () => {
         try {
@@ -106,11 +108,13 @@ const Inventory = () => {
         updatedItems[index]["Item Name"] = newName;
         setItems(updatedItems);
         setFilteredItems(updatedItems); // Update filteredItems as well
-
+        console.log("items:", items);
+        console.log("updatedItems:", updatedItems);
         try {
             const response = await axios.put(`/update_inventory_item/${index + 2}`, {
                 "Item name": newName,
                 "Quantity": updatedItems[index]["Quantity"],
+                "Description": updatedItems[index]["Description"],
             });
 
             if (response.status !== 200) {
@@ -130,33 +134,34 @@ const Inventory = () => {
         }
     };
     // TODO: Integgrate the description field
-    const updateItemDescription = async (index, newName) => {
+    const updateItemDescription = async (index, newDescription) => {
         const updatedItems = [...items];
-        const originalName = updatedItems[index]["Item Name"];
-        updatedItems[index]["Item Name"] = newName;
+        const originalDescription = updatedItems[index]["Description"];
+        updatedItems[index]["Description"] = newDescription;
         setItems(updatedItems);
         setFilteredItems(updatedItems); // Update filteredItems as well
 
         try {
             const response = await axios.put(`/update_inventory_item/${index + 2}`, {
-                "Item name": newName,
+                "Item name": updatedItems[index]["Item Name"],
                 "Quantity": updatedItems[index]["Quantity"],
+                "Description": newDescription,
             });
 
             if (response.status !== 200) {
                 // Revert the change if the server request fails
-                updatedItems[index]["Item Name"] = originalName;
+                updatedItems[index]["Description"] = originalDescription;
                 setItems(updatedItems);
                 setFilteredItems(updatedItems); // Revert filteredItems as well
-                console.error("Error updating item name:", response.data);
-                alert("Failed to update item name.");
+                console.error("Error updating item description:", response.data);
+                alert("Failed to update item description.");
             }
         } catch (error) {
             // Revert the change if the server request fails
-            updatedItems[index]["Item Name"] = originalName;
+            updatedItems[index]["Description"] = originalDescription;
             setItems(updatedItems);
             setFilteredItems(updatedItems); // Revert filteredItems as well
-            console.error("Error updating item name:", error);
+            console.error("Error updating item description:", error);
         }
     };
 
@@ -217,7 +222,7 @@ const Inventory = () => {
     };
 
     const handleDoubleClickDescription = (index) => {
-        setEditingIndex(index);
+        setEditingDescriptionIndex(index);
         setEditingDescription(filteredItems[index]["Description"]);
     };
 
@@ -225,7 +230,7 @@ const Inventory = () => {
         if (editingDescription.trim() !== '') {
             updateItemDescription(index, editingDescription);
         }
-        setEditingIndex(null);
+        setEditingDescriptionIndex(null);
         setEditingDescription('');
     };
 
@@ -266,20 +271,20 @@ const Inventory = () => {
                         {filteredItems.map((item, index) => (
                             <TableRow key={index}>
                                 <TableCell onDoubleClick={() => handleDoubleClick(index)}>
-                                    {editingIndex === index ? (
-                                        <TextField
-                                            value={editingName}
-                                            onChange={(e) => setEditingName(e.target.value)}
-                                            onBlur={() => handleBlur(index)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') handleBlur(index);
-                                            }}
-                                            autoFocus
-                                        />
-                                    ) : (
-                                        item["Item Name"]
-                                    )}
-                                </TableCell>
+                                     {editingIndex === index ? (
+                                         <TextField
+                                             value={editingName}
+                                             onChange={(e) => setEditingName(e.target.value)}
+                                             onBlur={() => handleBlur(index)}
+                                             onKeyDown={(e) => {
+                                                 if (e.key === 'Enter') handleBlur(index);
+                                             }}
+                                             autoFocus
+                                         />
+                                     ) : (
+                                         item["Item Name"]
+                                     )}
+                                 </TableCell>    
                                 <TableCell>
                                     <Button
                                         onClick={() => updateInventoryQuantity(index + 2, item["Quantity"] - 1)}
@@ -298,7 +303,7 @@ const Inventory = () => {
                                     </Button>
                                 </TableCell>
                                 <TableCell onDoubleClick={() => handleDoubleClickDescription(index)}>
-                                    {editingIndex === index ? (
+                                    {editingDescriptionIndex === index ? (
                                         <TextField
                                             value={editingDescription}
                                             onChange={(e) => setEditingDescription(e.target.value)}
