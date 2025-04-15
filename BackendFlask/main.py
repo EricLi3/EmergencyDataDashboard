@@ -92,12 +92,13 @@ def add_inventory_item():
         data = request.json
         item_name = data.get("Item name")
         quantity = data.get("Quantity")
+        description = data.get("Description")
 
         if not item_name or quantity is None:
-            return jsonify({"error": "Item name and Quantity are required"}), 400
+            return jsonify({"error": "Item name, Quantity, and Description are required"}), 400
 
         sheet = client.open_by_key(SHEET_ID).worksheet("Inventory")
-        sheet.append_row([item_name, quantity])
+        sheet.append_row([item_name, quantity, description])  # Append description
         return jsonify({"message": "Item added successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -110,12 +111,13 @@ def update_inventory_item(row_id):
         data = request.json
         item_name = data.get("Item name")
         quantity = data.get("Quantity")
+        description = data.get("Description")  # New field
 
         if not item_name or quantity is None:
-            return jsonify({"error": "Item name and Quantity are required"}), 400
+            return jsonify({"error": "Item name, Quantity, and Description are required"}), 400
 
         sheet = client.open_by_key(SHEET_ID).worksheet("Inventory")
-        sheet.update(f'A{row_id}:B{row_id}', [[item_name, quantity]])
+        sheet.update(f'A{row_id}:C{row_id}', [[item_name, quantity, description]])  # Update description
         return jsonify({"message": "Item updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
