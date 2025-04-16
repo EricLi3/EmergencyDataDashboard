@@ -53,62 +53,63 @@ const ResidentList = ({ residents, fetchResidents }) => {
     <div className="resident-list">
 
       <WeatherBanner /> {/* Include the WeatherBanner component */}
-      
-      <h1>Enrolled Residents</h1>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell>Address</StyledTableCell>
-              <StyledTableCell>Number of Residents</StyledTableCell>
-              <StyledTableCell>Children (Under 16)</StyledTableCell>
-              <StyledTableCell>Elderly (60+)</StyledTableCell>
-              <StyledTableCell>Phone Number</StyledTableCell>
-              <StyledTableCell>Skills</StyledTableCell>
-              <StyledTableCell>Newsletter</StyledTableCell>
-              <StyledTableCell>WhatsApp Alerts</StyledTableCell>
-              <StyledTableCell>Volunteer</StyledTableCell>
-              <StyledTableCell align="right">Profile Link</StyledTableCell>
-              <StyledTableCell align="right">Delete Resident</StyledTableCell>
-            </TableRow>
-          </TableHead>
+      <div className="resident-list-header">
+        <h1>Enrolled Residents</h1>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+                <StyledTableCell>Number of Residents</StyledTableCell>
+                <StyledTableCell>Children (Under 16)</StyledTableCell>
+                <StyledTableCell>Elderly (60+)</StyledTableCell>
+                <StyledTableCell>Phone Number</StyledTableCell>
+                <StyledTableCell>Skills</StyledTableCell>
+                <StyledTableCell>Newsletter</StyledTableCell>
+                <StyledTableCell>WhatsApp Alerts</StyledTableCell>
+                <StyledTableCell>Volunteer</StyledTableCell>
+                <StyledTableCell align="right">Profile Link</StyledTableCell>
+                <StyledTableCell align="right">Delete Resident</StyledTableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {residents.map((resident, index) => {
-              const email = resident["Preferred Email address if not Google"] || resident["Email Address"];
-              return (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    {resident["Name of main point of contact (ex. John Smith)"] || "N/A"}
-                  </StyledTableCell>
-                  <StyledTableCell>{email || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Address"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Number of Residents in Household"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"] || "0"}</StyledTableCell>
-                  <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"] || "0"}</StyledTableCell>
-                  <StyledTableCell>+{resident["Phone Number"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Skills"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell>{resident["Would you like to volunteer?"] || "N/A"}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    <Link to={`/profile/${index}`}>
-                      View Profile
-                    </Link>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <IconButton onClick={() => handleDelete(index + 2)} aria-label="delete" style={{ color: red[500] }}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            <TableBody>
+              {residents.map((resident, index) => {
+                const email = resident["Preferred Email address if not Google"] || resident["Email Address"];
+                return (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell component="th" scope="row">
+                      {resident["Name of main point of contact (ex. John Smith)"] || "N/A"}
+                    </StyledTableCell>
+                    <StyledTableCell>{email || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Address"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Number of Residents in Household"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["How many said residents are children (Under 16 years of age)"] || "0"}</StyledTableCell>
+                    <StyledTableCell>{resident["How many said residents are elderly (60 years +)?"] || "0"}</StyledTableCell>
+                    <StyledTableCell>+{resident["Phone Number"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Skills"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Want to be added to the Monthly Newsletter email chain?"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Would you like to receive important WhatsApp alerts?"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell>{resident["Would you like to volunteer?"] || "N/A"}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      <Link to={`/profile/${index}`}>
+                        View Profile
+                      </Link>
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <IconButton onClick={() => handleDelete(index + 2)} aria-label="delete" style={{ color: red[500] }}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div>
   );
 };
