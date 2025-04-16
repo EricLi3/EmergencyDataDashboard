@@ -40,8 +40,6 @@ const WeatherBanner = () => {
       <p>
         <strong>Temperature:</strong> {weather.temperature}°{weather.temperatureUnit}
       </p>
-
-      <br />
     </div>
   );
 };
