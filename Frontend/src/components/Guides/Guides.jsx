@@ -32,6 +32,11 @@ const Guides = () => {
             url: "https://docs.google.com/document/d/1T_Akf8E7GPLcp-cUvguSpTWHP-dBCMAkxt2y1jRdwLs/edit?usp=sharing",
             image: "/images/housePrep.png"
         },
+        {
+            title: "Goyco Resource Directory",
+            url: "https://docs.google.com/document/d/11rWCdjycUT5FS0__1B6TYiD0P9pieWiSncKD-3W3o4o/edit?usp=sharing",
+            image: "/images/resource_directory.png"
+        },
     ];
 
     return (
