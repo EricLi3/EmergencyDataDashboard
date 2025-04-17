@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/Login/Login";
 import ResidentList from "./components/ResidentList/Resident_list";
 import PersonProfile from "./components/PersonProfile/Person_profile";
 import WhatsAppNumbers from "./components/WhatsAppNumbers/WhatsAppNumbers";
@@ -14,11 +15,16 @@ import Groups from "./components/Groups/Groups";
 import "./App.css";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [residents, setResidents] = useState([]);
   const [whatsappNumbers, setWhatsappNumbers] = useState([]);
   const [contactGroups, setContactGroups] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem("isLoggedIn", true);
+  };
 
   // Function to fetch residents
   const fetchResidents = async () => {
@@ -56,7 +62,15 @@ function App() {
     fetchResidents();
     fetchWhatsAppNumbers();
     fetchContactGroups();
+    const loggedIn = localStorage.getItem("isLoggedIn");
+    if (loggedIn) {
+      setIsLoggedIn(true);
+    }
   }, []);
+
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="App">
