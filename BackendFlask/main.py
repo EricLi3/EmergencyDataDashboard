@@ -1,11 +1,19 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+import bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
 import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Allow all origins
+CORS(app)
+load_dotenv()
+
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 # Google Sheets API setup
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -14,12 +22,43 @@ client = gspread.authorize(creds)
 
 SHEET_ID = "1dTDd8Xwg3wv7MRHG2WAX_vXZKlEFne_rDMeemcHSD3s"
 
+# Predefined admin credentials (Option 2: Hardcoded)
+def fetch_admin_credentials():
+    sheet = client.open_by_key(SHEET_ID).worksheet("Admin")
+    data = sheet.get_all_records()
+    if len(data) > 0:
+        return data[0]["Username"], data[0]["PasswordHash"]
+    return None, None
+
 # Fetch the latest data from a specific sheet
 def fetch_data(sheet_name):
     """Fetches the latest data from a specific sheet in Google Sheets into a DataFrame"""
     sheet = client.open_by_key(SHEET_ID).worksheet(sheet_name)
     data = sheet.get_all_records()
     return pd.DataFrame(data)
+
+# Route: Login
+@app.route("/login", methods=["POST"])
+def login():
+    """Authenticates the admin user and returns a JWT token"""
+    try:
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+
+        if not username or not password:
+            return jsonify({"error": "Username and password are required"}), 400
+
+        admin_username, admin_password_hash = fetch_admin_credentials()
+
+        if username != admin_username or not bcrypt.checkpw(password.encode("utf-8"), admin_password_hash.encode("utf-8")):
+            return jsonify({"error": "Invalid username or password"}), 401
+
+        # Generate a JWT token
+        access_token = create_access_token(identity=username)
+        return jsonify({"access_token": access_token}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Route: Fetch all residents
 @app.route("/get_residents", methods=["GET"])
