@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+app.config["JWT_SECRET_KEY"] = "s3cUr3R@nd0mJWTs3cr3tK3y!1234567890abcdef"
 jwt = JWTManager(app)
 
 # Google Sheets API setup
