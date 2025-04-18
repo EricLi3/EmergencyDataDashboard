@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Analytics } from "@vercel/analytics/react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
@@ -24,7 +24,19 @@ function App() {
   const handleLogin = () => {
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", true);
+    fetchData();
   };
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([fetchResidents(), fetchWhatsAppNumbers(), fetchContactGroups()]);
+    } catch (error) {
+      console.error("Error fetching data!", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // Function to fetch residents
   const fetchResidents = async () => {
@@ -59,14 +71,12 @@ function App() {
   }
 
   useEffect(() => {
-    fetchResidents();
-    fetchWhatsAppNumbers();
-    fetchContactGroups();
     const loggedIn = localStorage.getItem("isLoggedIn");
     if (loggedIn) {
       setIsLoggedIn(true);
+      fetchData(); // Fetch data if already logged in
     }
-  }, []);
+  }, [fetchData]);
 
   if (!isLoggedIn) {
     return <Login onLogin={handleLogin} />;
@@ -77,16 +87,26 @@ function App() {
       <Analytics />
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />} />
-          <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/guides" element={<Guides />} />
-          <Route path="/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
-          <Route path="/map" element={<Map />} />
-          <Route path="/workflow" element={<Workflow />} />
-          <Route path="/groups" element={<Groups groups={contactGroups} fetchContactGroups={fetchContactGroups} />} />
-        </Routes>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <Routes>
+            <Route
+              path="/"
+              element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />}
+            />
+            <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/guides" element={<Guides />} />
+            <Route path="/whatsapp" element={<WhatsAppNumbers numbers={whatsappNumbers} />} />
+            <Route path="/map" element={<Map />} />
+            <Route path="/workflow" element={<Workflow />} />
+            <Route
+              path="/groups"
+              element={<Groups groups={contactGroups} fetchContactGroups={fetchContactGroups} />}
+            />
+          </Routes>
+        )}
       </Router>
     </div>
   );
