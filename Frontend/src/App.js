@@ -23,7 +23,7 @@ function App() {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", true);
+    sessionStorage.setItem("isLoggedIn", true);
     fetchData();
   };
 
@@ -71,7 +71,7 @@ function App() {
   }
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn");
+    const loggedIn = sessionStorage.getItem("isLoggedIn");
     if (loggedIn) {
       setIsLoggedIn(true);
       fetchData(); // Fetch data if already logged in
