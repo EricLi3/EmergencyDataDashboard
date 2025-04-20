@@ -3,3 +3,4 @@ BackendFlask/credentials.json
 .DS_Store
 Frontend\node_modules
 BackendFlask/.env
+Frontend/node_modules
