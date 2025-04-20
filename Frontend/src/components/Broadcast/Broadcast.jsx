@@ -3,7 +3,7 @@ import React from "react";
 const Broadcast = () => {
   
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <div style={{ textAlign: "center", marginTop: "20px", backgroundColor: "#f0f0f0" }}>
       <h1>Broadcast Messages</h1>
       {/* insert a button to download executable */}
       <h2>Please click the link below to download a Whatsapp broadcast application</h2>
