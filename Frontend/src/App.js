@@ -12,6 +12,7 @@ import Inventory from "./components/Inventory/Inventory";
 import Guides from "./components/Guides/Guides";
 import instance from "./axios/axiosConfig";
 import Groups from "./components/Groups/Groups";
+import Home from "./components/Home/Website_Homepage";
 import "./App.css";
 
 function App() {
@@ -93,8 +94,9 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />}
+              element={<Home />}
             />
+            <Route path="/ResidentList" element={<ResidentList residents={residents} fetchResidents={fetchResidents} loading={loading} />} />
             <Route path="/profile/:id" element={<PersonProfile residents={residents} />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/guides" element={<Guides />} />
