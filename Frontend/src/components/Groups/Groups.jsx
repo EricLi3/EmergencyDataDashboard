@@ -66,19 +66,37 @@ const Groups = ({ groups, fetchContactGroups }) => {
     // Generate the content for all groups
     const txtContent = groups
       .map(group => {
-        const formattedNumbers = group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join("\n");
+        const phoneNumbers =
+          Array.isArray(group.Phone_Numbers)
+            ? group.Phone_Numbers.join(",") // Convert array to a comma-separated string
+            : group.Phone_Numbers.toString(); // Ensure it's a string
+  
+        const formattedNumbers = phoneNumbers
+          .split(",")
+          .map(num => `+${num.trim()}`)
+          .join("\n");
+  
         return `${formattedNumbers}`;
       })
       .join("\n\n");
-
+  
     saveToFile(txtContent, "all_groups.txt");
   };
-
+  
   const handleDownloadIndividual = (group) => {
-    // Generate the content for a single group
-    const formattedNumbers = group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join("\n");
+    // Ensure Phone_Numbers is a string or array
+    const phoneNumbers =
+      Array.isArray(group.Phone_Numbers)
+        ? group.Phone_Numbers.join(",") // Convert array to a comma-separated string
+        : group.Phone_Numbers.toString(); // Ensure it's a string
+  
+    const formattedNumbers = phoneNumbers
+      .split(",")
+      .map(num => `+${num.trim()}`)
+      .join("\n");
+  
     const txtContent = `${formattedNumbers}`;
-
+  
     saveToFile(txtContent, `${group.Group_Name.replace(/\s+/g, "_")}.txt`);
   };
 
