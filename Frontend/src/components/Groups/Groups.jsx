@@ -70,33 +70,33 @@ const Groups = ({ groups, fetchContactGroups }) => {
           Array.isArray(group.Phone_Numbers)
             ? group.Phone_Numbers.join(",") // Convert array to a comma-separated string
             : group.Phone_Numbers.toString(); // Ensure it's a string
-  
+
         const formattedNumbers = phoneNumbers
           .split(",")
           .map(num => `+${num.trim()}`)
           .join("\n");
-  
+
         return `${formattedNumbers}`;
       })
       .join("\n\n");
-  
+
     saveToFile(txtContent, "all_groups.txt");
   };
-  
+
   const handleDownloadIndividual = (group) => {
     // Ensure Phone_Numbers is a string or array
     const phoneNumbers =
       Array.isArray(group.Phone_Numbers)
         ? group.Phone_Numbers.join(",") // Convert array to a comma-separated string
         : group.Phone_Numbers.toString(); // Ensure it's a string
-  
+
     const formattedNumbers = phoneNumbers
       .split(",")
       .map(num => `+${num.trim()}`)
       .join("\n");
-  
+
     const txtContent = `${formattedNumbers}`;
-  
+
     saveToFile(txtContent, `${group.Group_Name.replace(/\s+/g, "_")}.txt`);
   };
 
@@ -233,8 +233,14 @@ const Groups = ({ groups, fetchContactGroups }) => {
                     />
                   ) : (
                     typeof group.Phone_Numbers === 'string'
-                      ? group.Phone_Numbers.split(",").map(num => `+${num.trim()}`).join(", ")
-                      : `+${group.Phone_Numbers.toString().trim()}`
+                      ? group.Phone_Numbers.split(",")
+                        .map(num => (num.trim().startsWith("+") ? num.trim() : `+${num.trim()}`))
+                        .join(", ")
+                      : group.Phone_Numbers
+                        .toString()
+                        .split(",")
+                        .map(num => (num.trim().startsWith("+") ? num.trim() : `+${num.trim()}`))
+                        .join(", ")
                   )}
                 </StyledTableCell>
 
@@ -249,7 +255,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <IconButton
-                    onClick={() => handleDelete(index+2)}
+                    onClick={() => handleDelete(index + 2)}
                     aria-label="delete"
                     style={{ color: red[500] }}
                   >
