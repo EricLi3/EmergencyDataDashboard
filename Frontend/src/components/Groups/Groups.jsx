@@ -73,7 +73,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
 
         const formattedNumbers = phoneNumbers
           .split(",")
-          .map(num => `+${num.trim()}`)
+          .map(num => (num.trim().startsWith("+") ? num.trim() : `+${num.trim()}`))
           .join("\n");
 
         return `${formattedNumbers}`;
@@ -92,7 +92,7 @@ const Groups = ({ groups, fetchContactGroups }) => {
 
     const formattedNumbers = phoneNumbers
       .split(",")
-      .map(num => `+${num.trim()}`)
+      .map(num => (num.trim().startsWith("+") ? num.trim() : `+${num.trim()}`))
       .join("\n");
 
     const txtContent = `${formattedNumbers}`;
